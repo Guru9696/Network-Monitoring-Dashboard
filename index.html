@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Monitoring Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Network Monitoring Dashboard</h1>
+            <div class="theme-toggle">
+                <label for="darkMode">Dark Mode</label>
+                <input type="checkbox" id="darkMode">
+            </div>
+        </header>
+
+        <main>
+            <section class="cards">
+                <div class="card server-health">
+                    <h2>Server Health</h2>
+                    <canvas id="serverHealthChart"></canvas>
+                </div>
+
+                <div class="card bandwidth">
+                    <h2>Bandwidth Usage</h2>
+                    <canvas id="bandwidthChart"></canvas>
+                </div>
+
+                <div class="card status">
+                    <h2>Server Status</h2>
+                    <ul id="serverStatusList"></ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
