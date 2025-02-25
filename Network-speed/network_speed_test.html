@@ -5,12 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Network Speed Test</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        .liveData {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .finalResult {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #007BFF;
+        }
+        .speedContainer {
+            display: inline-block;
+            margin: 20px;
+            position: relative;
+        }
+        .circle {
+            width: 100px;
+            height: 100px;
+            border: 10px solid #ddd;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 0.5s ease;
+        }
+        .speedText {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <h1>Network Speed Test</h1>
     <button class="button" onclick="runSpeedTest()">Run Speed Test</button>
     <div class="result" id="result"></div>
     <div class="liveData" id="liveData"></div>
-<script src="script.js"></script>
+    
+    <div class="speedContainer">
+        <div class="circle" id="downloadCircle"></div>
+        <div class="speedText" id="downloadSpeed">0.00</div>
+    </div>
+    <div class="speedContainer">
+        <div class="circle" id="uploadCircle"></div>
+        <div class="speedText" id="uploadSpeed">0.00</div>
+    </div>
+
+    <div class="finalResult" id="finalResult"></div>
+
+<script>
+    function runSpeedTest() {
+        var liveDataDiv = document.getElementById("liveData");
+        var resultDiv = document.getElementById("result");
+        var finalResultDiv = document.getElementById("finalResult");
+        
+        var totalTime = 15; // 15 seconds test duration
+        var elapsedTime = 0;
+        
+        var totalDownload = 0;
+        var totalUpload = 0;
+
+        var prevDownloadSpeed = 0;
+        var prevUploadSpeed = 0;
+
+        var interval = setInterval(function() {
+            // Simulate download and upload speed every second
+            var downloadSpeed = (Math.random() * 100).toFixed(2); // Simulate download speed
+            var uploadSpeed = (Math.random() * 50).toFixed(2); // Simulate upload speed
+
+            // Add the speeds to total values for averaging
+            totalDownload += parseFloat(downloadSpeed);
+            totalUpload += parseFloat(uploadSpeed);
+
+            // Display live data
+            liveDataDiv.innerHTML = 
+                "Live Speed - Download: " + downloadSpeed + " Mbps, Upload: " + uploadSpeed + " Mbps";
+
+            // Update download circle animation
+            var downloadCircle = document.getElementById("downloadCircle");
+            var downloadText = document.getElementById("downloadSpeed");
+            var downloadDiff = downloadSpeed - prevDownloadSpeed;
+            if (downloadDiff > 0) {
+                downloadCircle.style.transform = 'rotate(' + (downloadDiff * 3.6) + 'deg)'; // Rotate clockwise
+            } else {
+                downloadCircle.style.transform = 'rotate(' + (-downloadDiff * 3.6) + 'deg)'; // Rotate anticlockwise
+            }
+            prevDownloadSpeed = downloadSpeed;
+
+            // Update upload circle animation
+            var uploadCircle = document.getElementById("uploadCircle");
+            var uploadText = document.getElementById("uploadSpeed");
+            var uploadDiff = uploadSpeed - prevUploadSpeed;
+            if (uploadDiff > 0) {
+                uploadCircle.style.transform = 'rotate(' + (uploadDiff * 3.6) + 'deg)'; // Rotate clockwise
+            } else {
+                uploadCircle.style.transform = 'rotate(' + (-uploadDiff * 3.6) + 'deg)'; // Rotate anticlockwise
+            }
+            prevUploadSpeed = uploadSpeed;
+
+            // Update the speed values in text
+            downloadText.innerHTML = downloadSpeed + " Mbps";
+            uploadText.innerHTML = uploadSpeed + " Mbps";
+
+            elapsedTime++;
+
+            // After 15 seconds, stop the interval and show the average
+            if (elapsedTime >= totalTime) {
+                clearInterval(interval);
+                var avgDownload = (totalDownload / totalTime).toFixed(2);
+                var avgUpload = (totalUpload / totalTime).toFixed(2);
+                
+                resultDiv.innerHTML = "Test completed!";
+                finalResultDiv.innerHTML = "Average Speed - Download: " + avgDownload + " Mbps, Upload: " + avgUpload + " Mbps";
+            }
+        }, 1000); // Update every second
+    }
+</script>
 </body>
 </html>
